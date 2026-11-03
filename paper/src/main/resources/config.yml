@@ -1,0 +1,9 @@
+server-id: "survival-1"
+redis:
+  uri: "redis://localhost:6379"
+metrics:
+  port: 9225
+database:
+  url: "jdbc:mariadb://localhost:3306/demo"
+  user: "demo"
+  password: ""

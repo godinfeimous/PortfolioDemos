@@ -1,0 +1,77 @@
+# Red de ejemplo: Velocity delante, tres Paper detrás, Redis y MariaDB compartidos, Prometheus y Grafana.
+# Solo el proxy publica puertos: a los Paper no se puede entrar sin pasar por Velocity.
+# Todo va con versión fija: en producción nada se actualiza solo.
+
+x-paper: &paper
+  image: itzg/minecraft-server:2026.10.1-java25
+  restart: unless-stopped
+  environment: &paper-env
+    EULA: "TRUE"
+    TYPE: PAPER
+    VERSION: "26.2"
+    PAPER_BUILD: "135"
+    ONLINE_MODE: "FALSE"        # autentica Velocity; el secreto va en config/paper-global.yml
+    USE_AIKAR_FLAGS: "true"
+    MEMORY: 4G
+  depends_on:
+    redis: { condition: service_healthy }
+    mariadb: { condition: service_healthy }
+
+services:
+  velocity:
+    image: itzg/mc-proxy:2026.11.0-java25
+    restart: unless-stopped
+    ports: ["25565:25565", "19132:19132/udp"]   # Java y Bedrock (Geyser va en el proxy)
+    environment:
+      TYPE: VELOCITY
+      MEMORY: 1G
+    volumes:
+      - ./velocity:/server
+      - ./velocity-config:/config:ro             # velocity.toml, forwarding.secret y plugins/geyser
+    depends_on:
+      lobby: { condition: service_healthy }
+
+  lobby:
+    <<: *paper
+    volumes: ["./lobby:/data"]
+  survival:
+    <<: *paper
+    environment: { <<: *paper-env, MEMORY: 10G }
+    volumes: ["./survival:/data"]
+  pvp:
+    <<: *paper
+    volumes: ["./pvp:/data"]
+
+  redis:
+    image: redis:8.8-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes: ["redis:/data"]
+    healthcheck: { test: ["CMD", "redis-cli", "ping"], interval: 5s }
+
+  mariadb:
+    image: mariadb:11.8.9
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: minecraft
+      MARIADB_USER: minecraft
+      MARIADB_PASSWORD_FILE: /run/secrets/db_password
+      MARIADB_RANDOM_ROOT_PASSWORD: "1"
+    secrets: [db_password]
+    volumes: ["mariadb:/var/lib/mysql"]
+    healthcheck: { test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"], interval: 5s }
+
+  # Lee el MetricsExporter (puerto 9225) de cada Paper.
+  prometheus:
+    image: prom/prometheus:v3.5.5
+    volumes: ["./prometheus.yml:/etc/prometheus/prometheus.yml:ro"]
+  grafana:
+    image: grafana/grafana:12.1.10
+    ports: ["127.0.0.1:3000:3000"]   # solo desde la propia máquina o por un túnel SSH
+
+secrets:
+  db_password: { file: ./secrets/db_password.txt }
+
+volumes:
+  redis: {}
+  mariadb: {}

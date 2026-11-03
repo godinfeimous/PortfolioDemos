@@ -1,0 +1,12 @@
+pluginManagement {
+	repositories {
+		maven { name = 'Fabric'; url = 'https://maven.fabricmc.net/' }
+		mavenCentral()
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'portfolio-demos'
+
+// Demos de código del portfolio (/minecraft): cada módulo compila contra la API real de su plataforma.
+include 'core', 'paper', 'velocity', 'fabric', 'minestom'

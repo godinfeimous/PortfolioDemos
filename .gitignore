@@ -1,0 +1,16 @@
+# Gradle y Loom
+.gradle/
+build/
+run/
+out/
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Configs reales (en config-example/ solo van ejemplos sin secretos)
+secrets/
+forwarding.secret
+.env

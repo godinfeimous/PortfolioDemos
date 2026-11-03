@@ -1,0 +1,25 @@
+// core, Paper, Velocity y Minestom (Java 25); el módulo de Fabric se configura aparte con Loom (Java 21).
+configure([project(':core'), project(':paper'), project(':velocity'), project(':minestom')]) {
+	apply plugin: 'java'
+
+	group = 'dev.godinfeimous.demos'
+	version = '1.0.0'
+
+	java {
+		// Minecraft 26.x pide Java 25.
+		toolchain { languageVersion = JavaLanguageVersion.of(25) }
+	}
+
+	repositories {
+		mavenCentral()
+		maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+		maven { url = 'https://maven.enginehub.org/repo/' }
+		maven { url = 'https://repo.codemc.io/repository/maven-releases/' }
+		maven { url = 'https://repo.opencollab.dev/main/' }
+	}
+
+	tasks.withType(JavaCompile).configureEach {
+		options.encoding = 'UTF-8'
+		options.compilerArgs += ['-Xlint:all', '-Xlint:-processing', '-Xlint:-serial', '-Werror']
+	}
+}

@@ -1,0 +1,15 @@
+# Extracto de plugins/geyser/config.yml en el proxy (Geyser 2.12, formato nuevo desde 2.9.1:
+# `remote` ahora es `java` y el MOTD tiene su propia sección).
+bedrock:
+  address: 0.0.0.0
+  port: 19132
+java:
+  # online: el jugador de Bedrock entra con su cuenta de Java y conserva su UUID (así lo reconoce el anticheat).
+  # floodgate: entra sin cuenta de Java; la misma key.pem va en el proxy y en cada Paper.
+  auth-type: online
+motd:
+  passthrough-motd: true          # el MOTD y los jugadores que ve Bedrock son los del proxy
+  passthrough-player-counts: true
+advanced:
+  java:
+    use-haproxy-protocol: false   # true solo si Velocity tiene haproxy-protocol activado

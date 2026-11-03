@@ -1,0 +1,9 @@
+{
+	"required": true,
+	"package": "dev.godinfeimous.demos.fabric.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"client": ["ChatComponentMixin", "GameRendererMixin", "MouseHandlerMixin"],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

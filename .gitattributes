@@ -1,0 +1,6 @@
+* text=auto
+# Scripts que se ejecutan en Linux: siempre con LF.
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+*.jar binary

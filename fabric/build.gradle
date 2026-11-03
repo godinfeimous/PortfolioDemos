@@ -1,0 +1,19 @@
+plugins {
+	// Minecraft 1.21.x sigue ofuscado: Loom con remapeo y los nombres oficiales de Mojang.
+	id 'net.fabricmc.fabric-loom-remap' version '1.18.2'
+}
+
+group = 'dev.godinfeimous.demos'
+version = '1.0.0'
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.release = 21
+}

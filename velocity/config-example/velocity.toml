@@ -1,0 +1,25 @@
+# Extracto de velocity.toml (Velocity 4.x) para la red de config-example/docker-compose.yml.
+config-version = "2.9"
+bind = "0.0.0.0:25565"
+online-mode = true
+
+# Reenvío "moderno": Velocity firma la IP y el UUID reales de cada jugador con una clave secreta,
+# así los servidores de atrás no pueden ser suplantados entrando directo a su puerto.
+player-info-forwarding-mode = "modern"
+forwarding-secret-file = "forwarding.secret"
+
+[servers]
+lobby = "lobby:25565"
+survival = "survival:25565"
+pvp = "pvp:25565"
+# Adonde entra cada jugador (y adonde lo manda LobbyFallback si un servidor cae).
+try = ["lobby"]
+
+[forced-hosts]
+# Entrar por pvp.tuservidor.net lleva directo al servidor de PvP.
+"pvp.tuservidor.net" = ["pvp"]
+
+[advanced]
+login-ratelimit = 3000
+# Detrás de TCPShield u otro proxy anti-DDoS, para ver la IP real del jugador.
+haproxy-protocol = false

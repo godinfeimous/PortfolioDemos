@@ -1,0 +1,24 @@
+# Extracto de plugins/LuckPerms/config.yml, igual en los tres Paper salvo `server`.
+# Con `server` cada servidor tiene su contexto: /lp group vip permission set essentials.fly true server=lobby
+server: survival
+
+storage-method: mariadb
+data:
+  address: mariadb:3306
+  database: minecraft
+  username: minecraft
+  password: ''              # se rellena al desplegar; nunca va al repositorio
+  pool-settings:
+    maximum-pool-size: 4    # tres servidores x 4 conexiones: sobra para LuckPerms y no ahoga a MariaDB
+    minimum-idle: 4
+  table-prefix: 'luckperms_'
+
+# Un cambio de rango en un servidor llega a los demás al instante, sin esperar a que nadie entre.
+messaging-service: redis
+redis:
+  enabled: true
+  address: redis:6379
+auto-push-updates: true
+
+# Si un permiso pide varios contextos, basta con cumplir uno de cada clave.
+context-satisfy-mode: at-least-one-value-per-key

@@ -1,0 +1,13 @@
+# Extracto de config/paper-global.yml en cada servidor detrás de Velocity.
+# server.properties lleva online-mode=false (autentica el proxy) y spigot.yml settings.bungeecord: false.
+proxies:
+  velocity:
+    enabled: true
+    online-mode: true          # el mismo valor que online-mode en velocity.toml
+    secret: "el-mismo-de-forwarding.secret"
+# Echa a quien pase de 500 paquetes por segundo de media en 7 s: crashers y bots de spam.
+packet-limiter:
+  all-packets:
+    action: KICK
+    interval: 7.0
+    max-packet-rate: 500.0

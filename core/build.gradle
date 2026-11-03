@@ -1,0 +1,39 @@
+// Lógica pura, sin Minecraft: se simula y se prueba con JUnit, y se mide con JMH.
+sourceSets {
+	jmh {
+		compileClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.main.output
+	}
+}
+
+dependencies {
+	testImplementation platform('org.junit:junit-bom:5.11.4')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	jmhImplementation 'org.openjdk.jmh:jmh-core:1.37'
+	jmhAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.37'
+}
+
+test {
+	useJUnitPlatform()
+	testLogging { events 'passed', 'failed' }
+}
+
+// JMH genera su propio código: ese source set compila sin -Werror.
+tasks.named('compileJmhJava') {
+	options.compilerArgs = ['-Xlint:none']
+}
+
+// gradlew :core:simulate → la tabla de la simulación del cambio de servidor (10.000 ejecuciones por variante).
+tasks.register('simulate', JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'dev.godinfeimous.core.handoff.HandoffReport'
+}
+
+// gradlew :core:jmh → benchmarks; los resultados quedan en build/jmh-results.json.
+tasks.register('jmh', JavaExec) {
+	dependsOn 'jmhClasses'
+	classpath = sourceSets.jmh.runtimeClasspath
+	mainClass = 'org.openjdk.jmh.Main'
+	args '-rf', 'json', '-rff', layout.buildDirectory.file('jmh-results.json').get().asFile.path
+}

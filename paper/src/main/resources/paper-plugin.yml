@@ -1,0 +1,21 @@
+name: GodinfeimousDemos
+version: '1.0.0'
+main: dev.godinfeimous.demos.DemoPlugin
+bootstrapper: dev.godinfeimous.demos.DemoBootstrap
+loader: dev.godinfeimous.demos.DemoLoader
+api-version: '26.2'
+authors: [godinfeimous]
+description: Demos de código del portfolio (Paper, LuckPerms, WorldGuard, PacketEvents, Geyser, Redis, Prometheus).
+dependencies:
+  server:
+    WorldGuard: { load: BEFORE, required: true, join-classpath: true }
+    packetevents: { load: BEFORE, required: true, join-classpath: true }
+    LuckPerms: { load: BEFORE, required: false, join-classpath: true }
+    Geyser-Spigot: { load: BEFORE, required: false, join-classpath: true }
+permissions:
+  demo.vena:
+    default: op
+  demo.promover:
+    default: op
+  demo.alerts:
+    default: op

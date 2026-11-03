@@ -1,0 +1,36 @@
+# Extracto de config/paper-world-defaults.yml para un survival de 100 jugadores (Paper 26.2).
+# Lo que cambia por dimensión va en world/dimensions/minecraft/<dimensión>/paper-world.yml.
+anticheat:
+  anti-xray:
+    enabled: true
+    engine-mode: 3            # minerales falsos por capa de chunk: protege casi como el 2 con la mitad de tráfico al entrar
+    max-block-height: 64      # múltiplo de 16; en el nether se sube a 128 en su paper-world.yml
+    update-radius: 2
+    lava-obscures: true
+misc:
+  redstone-implementation: ALTERNATE_CURRENT   # mismo comportamiento que vanilla, muchas menos actualizaciones
+environment:
+  optimize-explosions: true
+entities:
+  spawning:
+    per-player-mob-spawns: true
+    despawn-ranges:
+      monster:
+        soft: 28
+        hard:                 # forma larga: lleva las dos claves o Paper no arranca
+          horizontal: 96
+          vertical: 64
+chunks:
+  entity-per-chunk-save-limit:  # una granja rota no llena un chunk hasta corromperlo
+    experience_orb: 16
+    arrow: 16
+    snowball: 8
+collisions:
+  max-entity-collisions: 2    # las granjas de mobs apiladas dejan de costar ticks
+tick-rates:
+  grass-spread: 4
+  container-update: 1
+  mob-spawner: 2
+hopper:
+  cooldown-when-full: true
+  disable-move-event: true    # ningún plugin de esta red usa InventoryMoveItemEvent: se apaga y las tolvas cuestan casi nada
